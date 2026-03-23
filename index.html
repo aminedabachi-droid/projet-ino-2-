@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kazi — Casiers connectés sur les plages</title>
+<meta name="description" content="Kazi — Des casiers connectés sur les plages de Méditerranée. Sans appli, sans compte. Payez en 20 secondes, profitez de la mer. Lancement été 2026 à Marseille.">
+<meta property="og:title" content="Kazi — Casiers connectés sur les plages">
+<meta property="og:description" content="Des casiers connectés sur les plages. Sans appli. Sans compte. En 20 secondes.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   RESET & VARIABLES
+══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#0099A8;
+  --teal-light:#e0f5f7;
+  --teal-dark:#007a88;
+  --coral:#FF6B4A;
+  --coral-dark:#e5522f;
+  --sand:#FAFAF8;
+  --navy:#0D1B2A;
+  --navy2:#152436;
+  --ink:#111827;
+  --muted:#6B7280;
+  --border:#e5e7eb;
+  --white:#ffffff;
+  --r-sm:12px;
+  --r-md:16px;
+  --r-lg:24px;
+  --r-xl:32px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.05);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.1),0 4px 12px rgba(0,0,0,.06);
+  --shadow-xl:0 32px 80px rgba(0,0,0,.12);
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--sand);color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;font-size:16px;line-height:1.6}
+
+/* Focus */
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px;border-radius:4px}
+
+/* ══════════════════════════════════════════
+   TYPOGRAPHY
+══════════════════════════════════════════ */
+h1,h2,h3,h4{font-family:'Syne',sans-serif;font-weight:800;line-height:1.05;letter-spacing:-.025em;color:var(--ink)}
+h1{font-size:clamp(2.75rem,7vw,4.5rem)}
+h2{font-size:clamp(1.75rem,4vw,2.5rem)}
+h3{font-size:1.2rem;font-weight:700}
+p{max-width:600px;line-height:1.7;color:var(--muted)}
+
+.section-badge{
+  display:inline-block;font-family:'Inter',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--coral);
+  background:rgba(255,107,74,.08);border:1px solid rgba(255,107,74,.15);
+  border-radius:100px;padding:.3rem .9rem;margin-bottom:1rem;
+}
+.section-badge.teal{color:var(--teal);background:rgba(0,153,168,.08);border-color:rgba(0,153,168,.15)}
+
+/* ══════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════ */
+.container{max-width:1200px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
+.text-teal{color:var(--teal)}
+.text-coral{color:var(--coral)}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.85rem 1.75rem;border-radius:100px;font-family:'Inter',sans-serif;
+  font-size:.95rem;font-weight:600;text-decoration:none;cursor:pointer;
+  transition:all .22s cubic-bezier(.22,1,.36,1);min-height:48px;border:none;
+  white-space:nowrap;
+}
+.btn-coral{background:var(--coral);color:var(--white);box-shadow:0 4px 14px rgba(255,107,74,.3)}
+.btn-coral:hover{background:var(--coral-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,74,.38)}
+.btn-coral:active{transform:translateY(0)}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid rgba(17,24,39,.18)}
+.btn-ghost:hover{border-color:var(--ink);background:rgba(17,24,39,.04)}
+.btn-ghost-white{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.3)}
+.btn-ghost-white:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.55)}
+
+/* Cards hover */
+.card-hover{transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s}
+.card-hover:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+
+/* Reveal animation */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:none}
+.reveal.delay-1{transition-delay:.1s}
+.reveal.delay-2{transition-delay:.2s}
+.reveal.delay-3{transition-delay:.3s}
+.reveal.delay-4{transition-delay:.4s}
+
+/* ══════════════════════════════════════════
+   NAVBAR
+══════════════════════════════════════════ */
+#navbar{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:68px;display:flex;align-items:center;
+  transition:background .3s,box-shadow .3s,backdrop-filter .3s;
+}
+#navbar.scrolled{
+  background:rgba(250,250,248,.95);backdrop-filter:blur(20px);
+  box-shadow:0 1px 0 rgba(0,0,0,.07),0 2px 12px rgba(0,0,0,.04);
+}
+.nav-inner{width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem);display:flex;align-items:center;justify-content:space-between;gap:2rem}
+
+.nav-logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--ink);letter-spacing:-.03em}
+.nav-logo-icon{width:28px;height:28px;border-radius:8px;background:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-logo-icon svg{width:16px;height:16px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round}
+
+.nav-links{display:flex;align-items:center;gap:2.5rem}
+.nav-links a{font-size:.9rem;color:var(--ink);opacity:.65;text-decoration:none;font-weight:500;transition:opacity .2s}
+.nav-links a:hover{opacity:1}
+
+/* Hamburger */
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;padding:.5rem;border-radius:8px;transition:background .2s}
+.hamburger:hover{background:rgba(0,0,0,.06)}
+.hamburger span{display:block;height:2px;background:var(--ink);border-radius:2px;transition:all .3s cubic-bezier(.22,1,.36,1);width:22px}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* Mobile drawer */
+.mobile-drawer{
+  position:fixed;top:68px;right:0;bottom:0;width:min(320px,100vw);z-index:999;
+  background:var(--white);box-shadow:-4px 0 40px rgba(0,0,0,.12);
+  display:flex;flex-direction:column;padding:2rem;gap:1rem;
+  transform:translateX(100%);transition:transform .35s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+}
+.mobile-drawer.open{transform:translateX(0);pointer-events:auto}
+.mobile-drawer a{font-size:1.1rem;font-weight:600;color:var(--ink);text-decoration:none;padding:.75rem 0;border-bottom:1px solid var(--border);font-family:'Syne',sans-serif}
+.mobile-drawer .drawer-cta{margin-top:auto}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:998;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.open{opacity:1;pointer-events:auto}
+
+/* ══════════════════════════════════════════
+   HERO
+══════════════════════════════════════════ */
+#hero{
+  min-height:100vh;padding-top:68px;
+  background:linear-gradient(165deg,#fafaf8 0%,#f0f9fb 45%,#fafaf8 100%);
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;
+}
+
+/* Subtle bg wave SVG */
+.hero-bg-wave{position:absolute;bottom:0;left:0;right:0;pointer-events:none;z-index:0}
+.hero-bg-circle{
+  position:absolute;top:-10%;right:-5%;
+  width:min(600px,70vw);height:min(600px,70vw);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(0,153,168,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+.hero-inner{
+  width:100%;max-width:1200px;margin:0 auto;
+  padding:clamp(3rem,8vw,6rem) clamp(1.25rem,5vw,3rem) clamp(4rem,8vw,7rem);
+  display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;
+  position:relative;z-index:1;
+}
+
+.hero-content{}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(0,153,168,.08);border:1px solid rgba(0,153,168,.18);
+  color:var(--teal);border-radius:100px;padding:.35rem 1rem;
+  font-size:.78rem;font-weight:600;letter-spacing:.04em;margin-bottom:1.5rem;
+}
+.live-dot{width:7px;height:7px;background:#30d158;border-radius:50%;animation:pulse-dot 2s infinite;box-shadow:0 0 0 0 rgba(48,209,88,.4)}
+@keyframes pulse-dot{0%{box-shadow:0 0 0 0 rgba(48,209,88,.5)}70%{box-shadow:0 0 0 7px rgba(48,209,88,0)}100%{box-shadow:0 0 0 0 rgba(48,209,88,0)}}
+
+.hero-h1{
+  font-size:clamp(2.75rem,5.5vw,4.5rem);
+  margin-bottom:1.4rem;line-height:.98;
+}
+.hero-h1 span{color:var(--teal)}
+.hero-sub{font-size:1.1rem;color:var(--muted);margin-bottom:2.2rem;max-width:480px;line-height:1.7;font-weight:400}
+.hero-sub strong{color:var(--ink);font-weight:600}
+.hero-actions{display:flex;gap:.85rem;flex-wrap:wrap;align-items:center}
+
+/* Phone mockup */
+.hero-visual{position:relative;display:flex;justify-content:center;align-items:flex-start;padding-top:1rem}
+
+.phone-mockup{
+  width:280px;
+  background:var(--white);
+  border-radius:44px;
+  border:8px solid #1a1a2e;
+  box-shadow:0 0 0 1px rgba(255,255,255,.15) inset,var(--shadow-xl);
+  overflow:hidden;position:relative;
+  font-family:'Inter',sans-serif;
+}
+.phone-notch{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:100px;height:28px;background:#1a1a2e;border-radius:0 0 20px 20px;z-index:10;
+}
+.phone-screen{min-height:520px;background:var(--sand);padding:3.5rem 1.2rem 1.5rem;position:relative;overflow:hidden}
+
+/* Animated steps */
+.phone-step{
+  position:absolute;top:3.5rem;left:1.2rem;right:1.2rem;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .4s ease,transform .4s ease;
+  pointer-events:none;
+}
+.phone-step.active{opacity:1;transform:translateY(0);position:relative;top:auto;left:auto;right:auto}
+
+.ps-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.ps-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--ink)}
+.ps-step-badge{background:var(--teal);color:white;font-size:.65rem;font-weight:700;padding:.2rem .6rem;border-radius:100px;letter-spacing:.05em}
+
+.ps-qr-area{background:white;border-radius:16px;padding:1.5rem;text-align:center;margin-bottom:1rem;border:1px solid var(--border)}
+.ps-qr-icon{margin:0 auto .75rem;width:64px;height:64px}
+.ps-qr-title{font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:.25rem}
+.ps-qr-sub{font-size:.73rem;color:var(--muted)}
+
+.ps-duration-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:1rem}
+.ps-dur{background:white;border:1.5px solid var(--border);border-radius:12px;padding:.75rem .5rem;text-align:center;cursor:pointer;transition:all .2s}
+.ps-dur.sel{border-color:var(--teal);background:var(--teal-light)}
+.ps-dur-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--ink)}
+.ps-dur.sel .ps-dur-val{color:var(--teal)}
+.ps-dur-label{font-size:.65rem;color:var(--muted)}
+.ps-dur.sel .ps-dur-label{color:var(--teal)}
+.ps-total{background:var(--sand);border-radius:12px;padding:.8rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.ps-total-label{font-size:.78rem;color:var(--muted)}
+.ps-total-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--ink)}
+
+.ps-success{text-align:center;padding:2rem 1rem}
+.ps-success-icon{width:64px;height:64px;border-radius:50%;background:rgba(48,209,88,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.ps-success-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--ink);margin-bottom:.35rem}
+.ps-success-sub{font-size:.78rem;color:var(--muted);line-height:1.5}
+.ps-locker-num{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--teal);margin:.5rem 0}
+.ps-code{background:var(--teal);color:white;border-radius:12px;padding:.6rem 1rem;font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;letter-spacing:.12em;display:inline-block;margin-top:.5rem}
+
+.phone-pay-btn{
+  width:100%;background:var(--coral);color:white;border:none;border-radius:14px;
+  padding:.9rem;font-family:'Inter',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;
+  margin-top:.5rem;letter-spacing:.01em;
+}
+
+/* Floating badge */
+.phone-badge{
+  position:absolute;top:-1rem;right:-2rem;
+  background:var(--navy);color:white;border-radius:100px;
+  padding:.45rem 1rem;font-size:.72rem;font-weight:600;
+  display:flex;align-items:center;gap:.4rem;
+  box-shadow:var(--shadow-md);
+  animation:badge-float 3s ease-in-out infinite;white-space:nowrap;
+}
+@keyframes badge-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* Progress dots */
+.phone-dots{display:flex;gap:.4rem;justify-content:center;margin-top:1.2rem}
+.pd{width:6px;height:6px;border-radius:50%;background:var(--border);transition:all .3s}
+.pd.active{background:var(--teal);width:18px;border-radius:3px}
+
+/* Wave bottom hero */
+.hero-wave{position:absolute;bottom:0;left:0;right:0;line-height:0;pointer-events:none;z-index:1}
+
+/* ══════════════════════════════════════════
+   STATS BAND
+══════════════════════════════════════════ */
+#stats{background:var(--navy);position:relative;overflow:hidden}
+.stats-dots{position:absolute;inset:0;pointer-events:none;opacity:.04}
+.stats-inner{
+  max-width:1200px;margin:0 auto;padding:clamp(2.5rem,5vw,4rem) clamp(1.25rem,5vw,3rem);
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+}
+.stat-item{text-align:center;padding:2rem 1rem;position:relative}
+.stat-item+.stat-item::before{content:'';position:absolute;left:0;top:20%;height:60%;width:1px;background:rgba(255,255,255,.08)}
+.stat-num{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(2rem,4vw,3rem);color:var(--white);
+  display:block;line-height:1;margin-bottom:.4rem;
+}
+.stat-unit{color:var(--teal);font-size:.8em}
+.stat-label{font-size:.82rem;color:rgba(255,255,255,.45);letter-spacing:.04em;font-weight:500}
+
+/* ══════════════════════════════════════════
+   HOW IT WORKS
+══════════════════════════════════════════ */
+#how{padding:clamp(4rem,8vw,7rem) 0;background:var(--sand)}
+.how-inner{max-width:1200px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
+.how-header{margin-bottom:3.5rem}
+.steps-row{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:start;gap:0;position:relative}
+
+.step-card{
+  background:var(--white);border-radius:var(--r-xl);
+  padding:2.2rem;border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+}
+.step-bg-num{
+  position:absolute;top:-1rem;right:.5rem;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:5.5rem;
+  color:var(--teal);opacity:.07;line-height:1;pointer-events:none;user-select:none;
+}
+.step-icon{
+  width:52px;height:52px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.2rem;
+}
+.step-icon.s1{background:rgba(0,153,168,.1)}
+.step-icon.s2{background:rgba(255,107,74,.08)}
+.step-icon.s3{background:rgba(48,209,88,.08)}
+.step-icon svg{width:26px;height:26px}
+.step-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:.5rem}
+.step-desc{font-size:.88rem;color:var(--muted);line-height:1.65;max-width:none}
+
+/* Connector line */
+.step-connector{
+  align-self:center;margin-top:-4rem;padding:0 .5rem;
+  display:flex;align-items:center;
+}
+.connector-line{
+  width:100%;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--teal));
+  background-size:0% 100%;background-repeat:no-repeat;
+  border-image:none;position:relative;
+}
+.connector-svg{width:80px;height:20px}
+.connector-dashes{stroke:var(--teal);stroke-width:2;stroke-dasharray:6 4;fill:none;stroke-linecap:round}
+.connector-dashes.animated{stroke-dashoffset:200;animation:draw-dash 1.5s ease forwards}
+@keyframes draw-dash{to{stroke-dashoffset:0}}
+
+/* ══════════════════════════════════════════
+   BORNES
+══════════════════════════════════════════ */
+#bornes{
+  padding:clamp(4rem,8vw,7rem) 0;
+  background:linear-gradient(180deg,var(--navy) 0%,#0a1f30 100%);
+}
+.bornes-inner{max-width:1200px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
+.bornes-header{margin-bottom:3rem}
+.bornes-header .section-badge,.bornes-header h2,.bornes-header p{color:white}
+.bornes-header p{color:rgba(255,255,255,.55)}
+.bornes-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.borne-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--r-xl);padding:2.5rem;
+  transition:all .28s;
+}
+.borne-card:hover{background:rgba(255,255,255,.08);border-color:rgba(0,153,168,.3);transform:translateY(-4px)}
+
+/* CSS Locker Visual */
+.locker-visual{
+  background:rgba(0,0,0,.2);border-radius:var(--r-lg);
+  padding:1.5rem;margin-bottom:2rem;
+  display:flex;justify-content:center;
+}
+.locker-unit{
+  width:180px;
+  background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;padding:1rem;
+}
+.locker-header{text-align:center;margin-bottom:.75rem}
+.locker-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:var(--teal);letter-spacing:.05em}
+.locker-grid-css{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.locker-cell{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:8px;padding:.6rem .4rem;
+  text-align:center;position:relative;
+}
+.locker-cell.nature{border-color:rgba(139,195,74,.3)}
+.locker-cell.occupied{background:rgba(255,107,74,.08);border-color:rgba(255,107,74,.2)}
+.lc-num{font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;color:rgba(255,255,255,.7);display:block}
+.lc-led{
+  width:6px;height:6px;border-radius:50%;
+  margin:3px auto 0;
+}
+.lc-led.green{background:#4ade80;box-shadow:0 0 5px rgba(74,222,128,.6)}
+.lc-led.red{background:var(--coral);box-shadow:0 0 5px rgba(255,107,74,.5)}
+.lc-led.pulse{animation:led-pulse 2s infinite}
+@keyframes led-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.borne-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:white;margin-bottom:.4rem}
+.borne-desc{font-size:.88rem;color:rgba(255,255,255,.5);margin-bottom:1.2rem;line-height:1.6;max-width:none}
+.borne-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.borne-tag{
+  background:rgba(0,153,168,.12);border:1px solid rgba(0,153,168,.2);
+  color:rgba(255,255,255,.7);border-radius:100px;
+  font-size:.72rem;font-weight:500;padding:.25rem .7rem;
+}
+.borne-tag.urban{background:rgba(255,107,74,.1);border-color:rgba(255,107,74,.2)}
+.borne-disclaimer{
+  margin-top:2.5rem;font-size:.78rem;color:rgba(255,255,255,.3);
+  font-style:italic;text-align:center;
+}
+
+/* ══════════════════════════════════════════
+   LOCATIONS
+══════════════════════════════════════════ */
+#locations{padding:clamp(4rem,8vw,7rem) 0;background:var(--sand)}
+.locations-inner{max-width:1200px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
+.locations-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:3rem}
+.loc-card{
+  background:var(--white);border-radius:var(--r-xl);
+  padding:1.8rem;border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+}
+.loc-badge{
+  display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;padding:.25rem .75rem;border-radius:100px;margin-bottom:1rem;
+}
+.loc-badge.green{background:rgba(48,209,88,.1);color:#16a34a;border:1px solid rgba(48,209,88,.2)}
+.loc-badge.orange{background:rgba(251,146,60,.1);color:#c2410c;border:1px solid rgba(251,146,60,.2)}
+.loc-icon{font-size:1.5rem;margin-bottom:.75rem;display:block}
+.loc-city{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:var(--ink);margin-bottom:.2rem}
+.loc-name{font-size:.85rem;color:var(--muted);margin-bottom:.6rem}
+.loc-count{font-size:.82rem;font-weight:600;color:var(--teal)}
+
+.loc-suggest{
+  background:transparent;border:1.5px dashed var(--border);
+  border-radius:var(--r-xl);padding:1.8rem;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:.5rem;cursor:pointer;transition:all .22s;
+  text-decoration:none;
+}
+.loc-suggest:hover{border-color:var(--teal);background:rgba(0,153,168,.03)}
+.loc-suggest-icon{font-size:1.8rem}
+.loc-suggest-text{font-size:.88rem;font-weight:600;color:var(--teal)}
+.loc-suggest-sub{font-size:.78rem;color:var(--muted)}
+
+.loc-disclaimer{margin-top:1.5rem;font-size:.78rem;color:var(--muted);font-style:italic;text-align:center}
+
+/* ══════════════════════════════════════════
+   PRICING
+══════════════════════════════════════════ */
+#pricing{padding:clamp(4rem,8vw,7rem) 0;background:var(--white)}
+.pricing-inner{max-width:1200px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:3rem}
+
+.pc{
+  background:var(--sand);border-radius:var(--r-xl);
+  padding:2.2rem;border:1.5px solid transparent;
+  transition:all .28s;position:relative;
+}
+.pc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.pc.featured{
+  background:var(--navy);border-color:var(--teal);
+  box-shadow:0 0 0 1px var(--teal),var(--shadow-lg);
+}
+.pc-popular{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--teal);color:white;border-radius:100px;
+  font-size:.7rem;font-weight:700;letter-spacing:.06em;
+  padding:.3rem 1rem;white-space:nowrap;
+}
+
+.pc-name{font-size:.8rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+.pc.featured .pc-name{color:rgba(255,255,255,.45)}
+.pc-price-row{display:flex;align-items:baseline;gap:.3rem;margin-bottom:.25rem}
+.pc-price{font-family:'Syne',sans-serif;font-weight:800;font-size:2.8rem;color:var(--ink);line-height:1}
+.pc.featured .pc-price{color:white}
+.pc-unit{font-size:.95rem;color:var(--muted);font-weight:400}
+.pc.featured .pc-unit{color:rgba(255,255,255,.45)}
+.pc-duration{font-size:.82rem;color:var(--muted);margin-bottom:1.4rem}
+.pc.featured .pc-duration{color:rgba(255,255,255,.5)}
+.pc-ideal{font-size:.82rem;font-weight:600;color:var(--ink);margin-bottom:1.5rem}
+.pc.featured .pc-ideal{color:white}
+.pc-btn{width:100%;padding:.8rem;font-size:.88rem}
+
+.pricing-note{text-align:center;font-size:.82rem;color:var(--muted);margin-top:2rem;font-style:italic}
+
+/* ══════════════════════════════════════════
+   WAITLIST
+══════════════════════════════════════════ */
+#waitlist{
+  padding:clamp(4rem,8vw,7rem) 0;
+  background:var(--navy);position:relative;overflow:hidden;
+}
+
+/* Dot texture */
+#waitlist::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:24px 24px;pointer-events:none;
+}
+
+.waitlist-inner{max-width:680px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem);text-align:center;position:relative;z-index:1}
+.waitlist-inner .section-badge{background:rgba(255,107,74,.12);border-color:rgba(255,107,74,.2)}
+.waitlist-inner h2{color:white;font-size:clamp(2rem,5vw,3rem);margin-bottom:.8rem}
+.waitlist-inner .wl-sub{font-size:1rem;color:rgba(255,255,255,.5);max-width:460px;margin:0 auto 2.5rem;line-height:1.7}
+.waitlist-inner .wl-sub strong{color:var(--coral)}
+
+.wl-form{display:flex;gap:.6rem;max-width:480px;margin:0 auto 1rem}
+.wl-input{
+  flex:1;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);
+  border-radius:100px;padding:.85rem 1.4rem;font-size:.92rem;color:white;
+  font-family:'Inter',sans-serif;outline:none;transition:border .2s;
+  min-width:0;
+}
+.wl-input::placeholder{color:rgba(255,255,255,.3)}
+.wl-input:focus{border-color:rgba(255,255,255,.35)}
+.wl-btn{padding:.85rem 1.75rem;flex-shrink:0}
+
+.wl-counter{font-size:.82rem;color:rgba(255,255,255,.4);margin-bottom:.75rem}
+.wl-counter strong{color:var(--coral)}
+.wl-reassurance{font-size:.78rem;color:rgba(255,255,255,.3);letter-spacing:.01em}
+
+.wl-success{
+  display:none;
+  background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.2);
+  border-radius:16px;padding:2rem;max-width:480px;margin:0 auto;
+}
+.wl-success.show{display:block;animation:fade-in .4s ease}
+@keyframes fade-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.wl-success-icon{font-size:2rem;margin-bottom:.5rem;display:block}
+.wl-success-text{font-size:.95rem;color:rgba(255,255,255,.75);line-height:1.6}
+.wl-success-text strong{color:#4ade80}
+
+/* ══════════════════════════════════════════
+   FAQ
+══════════════════════════════════════════ */
+#faq{padding:clamp(4rem,8vw,7rem) 0;background:var(--sand)}
+.faq-inner{max-width:800px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
+.faq-list{margin-top:2.5rem;display:flex;flex-direction:column;gap:.6rem}
+
+.faq-item{
+  background:var(--white);border-radius:var(--r-lg);
+  border:1px solid var(--border);overflow:hidden;
+  transition:border-color .2s,box-shadow .2s;
+}
+.faq-item.open{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal)}
+
+.faq-trigger{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 1.5rem;gap:1rem;
+  background:none;border:none;cursor:pointer;text-align:left;
+  font-family:'Inter',sans-serif;font-size:.93rem;font-weight:600;color:var(--ink);
+  transition:background .15s;
+}
+.faq-trigger:hover{background:rgba(0,153,168,.03)}
+
+.faq-icon{
+  width:28px;height:28px;min-width:28px;border-radius:50%;
+  background:var(--sand);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;
+}
+.faq-icon svg{width:13px;height:13px;transition:transform .3s;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.faq-item.open .faq-icon{background:var(--teal);border-color:var(--teal)}
+.faq-item.open .faq-icon svg{transform:rotate(180deg);stroke:white}
+
+.faq-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s cubic-bezier(.22,1,.36,1);
+}
+.faq-item.open .faq-body{max-height:200px}
+.faq-answer{padding:.2rem 1.5rem 1.3rem;font-size:.88rem;color:var(--muted);line-height:1.75;max-width:none}
+.faq-answer a{color:var(--teal);text-decoration:none;font-weight:500}
+.faq-answer a:hover{text-decoration:underline}
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer{
+  background:var(--navy);
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:clamp(3rem,6vw,5rem) 0 2rem;
+}
+.footer-inner{max-width:1200px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+
+.footer-brand .f-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:white;
+  display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;
+}
+.footer-brand .f-logo-icon{width:26px;height:26px;border-radius:7px;background:var(--teal);display:flex;align-items:center;justify-content:center}
+.footer-brand .f-logo-icon svg{width:14px;height:14px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round}
+.footer-tagline{font-size:.88rem;color:rgba(255,255,255,.35);line-height:1.6;margin-bottom:1.2rem;max-width:240px}
+.footer-copy{font-size:.78rem;color:rgba(255,255,255,.22)}
+
+.f-col h4{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:1.1rem}
+.f-col a{display:block;font-size:.88rem;color:rgba(255,255,255,.45);text-decoration:none;margin-bottom:.6rem;transition:color .2s}
+.f-col a:hover{color:white}
+
+.f-socials{display:flex;gap:.6rem;margin-bottom:1rem}
+.f-social{
+  width:40px;height:40px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .22s;text-decoration:none;
+}
+.f-social:hover{background:var(--teal);border-color:var(--teal);transform:translateY(-2px)}
+.f-social:hover svg{fill:white}
+.f-social svg{width:17px;height:17px;fill:rgba(255,255,255,.4);transition:fill .2s}
+.f-coming{font-size:.72rem;color:rgba(255,255,255,.22);font-style:italic}
+
+.footer-bottom{
+  padding-top:2rem;border-top:1px solid rgba(255,255,255,.06);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+}
+
+/* ══════════════════════════════════════════
+   BACK TO TOP
+══════════════════════════════════════════ */
+#back-top{
+  position:fixed;bottom:1.75rem;right:1.75rem;z-index:900;
+  width:46px;height:46px;border-radius:50%;
+  background:var(--navy);border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow-md);cursor:pointer;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s,transform .3s,background .2s;
+  text-decoration:none;
+}
+#back-top.visible{opacity:1;pointer-events:auto}
+#back-top:hover{background:var(--teal);transform:translateY(-3px)}
+#back-top svg{width:18px;height:18px;stroke:rgba(255,255,255,.8);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ══════════════════════════════════════════
+   WAVE SEPARATORS
+══════════════════════════════════════════ */
+.wave-sep{line-height:0;overflow:hidden}
+.wave-sep svg{display:block;width:100%}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr;max-width:600px;text-align:center}
+  .hero-content{display:flex;flex-direction:column;align-items:center}
+  .hero-visual{display:none}
+  .steps-row{grid-template-columns:1fr;gap:1rem}
+  .step-connector{display:none}
+  .steps-row .step-connector-v{display:flex;justify-content:center;padding:.5rem 0}
+  .bornes-grid{grid-template-columns:1fr}
+  .locations-grid{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .stats-inner{grid-template-columns:1fr 1fr}
+  .stat-item+.stat-item::before{display:none}
+  .stat-item{border-bottom:1px solid rgba(255,255,255,.06);padding:1.5rem 1rem}
+  .stat-item:nth-child(3),.stat-item:nth-child(4){border-bottom:none}
+  .stat-item:nth-child(odd){border-right:1px solid rgba(255,255,255,.06)}
+  .pricing-grid{grid-template-columns:1fr;max-width:400px;margin-left:auto;margin-right:auto}
+  .pc.featured{order:-1}
+  .locations-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;gap:2rem;text-align:center}
+  .footer-bottom{flex-direction:column;text-align:center}
+  .f-socials{justify-content:center}
+  .footer-tagline,.footer-copy{margin-left:auto;margin-right:auto}
+  .wl-form{flex-direction:column}
+  .wl-input,.wl-btn{width:100%}
+  .hero-actions{justify-content:center}
+  .f-logo{justify-content:center}
+}
+
+@media(max-width:480px){
+  h1{font-size:2.4rem}
+  .stats-inner{grid-template-columns:1fr}
+  .stat-item:nth-child(odd){border-right:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<header>
+<nav id="navbar" role="navigation" aria-label="Navigation principale">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" aria-label="Kazi - Retour à l'accueil">
+      <div class="nav-logo-icon" aria-hidden="true">
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <rect x="2" y="2" width="5" height="5" rx="1" stroke-width="1.8"/>
+          <rect x="9" y="2" width="5" height="5" rx="1" stroke-width="1.8"/>
+          <rect x="2" y="9" width="5" height="5" rx="1" stroke-width="1.8"/>
+          <rect x="9" y="9" width="5" height="5" rx="1" stroke-width="1.8"/>
+        </svg>
+      </div>
+      Kazi
+    </a>
+
+    <div class="nav-links" role="list">
+      <a href="#how" role="listitem">Concept</a>
+      <a href="#pricing" role="listitem">Tarifs</a>
+      <a href="mailto:partenaires@kazi.fr" role="listitem">Partenaires</a>
+    </div>
+
+    <a href="#waitlist" class="btn btn-coral" style="font-size:.85rem;padding:.6rem 1.3rem">Rejoindre la waitlist</a>
+
+    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="overlay" id="overlay" aria-hidden="true"></div>
+<div class="mobile-drawer" id="mobile-drawer" role="dialog" aria-label="Menu mobile" aria-hidden="true">
+  <a href="#how" onclick="closeDrawer()">Concept</a>
+  <a href="#pricing" onclick="closeDrawer()">Tarifs</a>
+  <a href="mailto:partenaires@kazi.fr">Partenaires</a>
+  <a href="#waitlist" onclick="closeDrawer()">FAQ</a>
+  <div class="drawer-cta">
+    <a href="#waitlist" class="btn btn-coral" style="width:100%;justify-content:center" onclick="closeDrawer()">Rejoindre la waitlist →</a>
+  </div>
+</div>
+</header>
+
+<main>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero" aria-labelledby="hero-title">
+  <div class="hero-bg-circle" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <!-- Left: Content -->
+    <div class="hero-content reveal">
+      <div class="hero-eyebrow">
+        <span class="live-dot" aria-hidden="true"></span>
+        Lancement Été 2026 · Marseille
+      </div>
+      <h1 class="hero-h1" id="hero-title">
+        Posez vos affaires.<br>Profitez de la <span>mer.</span>
+      </h1>
+      <p class="hero-sub">
+        Des casiers connectés sur les plages. <strong>Sans appli. Sans compte.</strong> En 20 secondes.
+      </p>
+      <div class="hero-actions">
+        <a href="#waitlist" class="btn btn-coral">Je veux être prévenu(e) →</a>
+        <a href="#how" class="btn btn-ghost">Comment ça marche</a>
+      </div>
+    </div>
+
+    <!-- Right: Phone mockup -->
+    <div class="hero-visual reveal delay-2" aria-hidden="true">
+      <div style="position:relative">
+        <div class="phone-badge">🔒 Lancement Été 2026 · Marseille</div>
+
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+
+            <!-- Step 1: Scan -->
+            <div class="phone-step active" id="ps1">
+              <div class="ps-header">
+                <div class="ps-logo">Kazi</div>
+                <div class="ps-step-badge">ÉTAPE 1 / 3</div>
+              </div>
+              <div class="ps-qr-area">
+                <div class="ps-qr-icon">
+                  <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="4" width="24" height="24" rx="3" stroke="#0099A8" stroke-width="2.5"/>
+                    <rect x="10" y="10" width="12" height="12" rx="1.5" fill="#0099A8"/>
+                    <rect x="36" y="4" width="24" height="24" rx="3" stroke="#0099A8" stroke-width="2.5"/>
+                    <rect x="42" y="10" width="12" height="12" rx="1.5" fill="#0099A8"/>
+                    <rect x="4" y="36" width="24" height="24" rx="3" stroke="#0099A8" stroke-width="2.5"/>
+                    <rect x="10" y="42" width="12" height="12" rx="1.5" fill="#0099A8"/>
+                    <rect x="36" y="36" width="10" height="10" rx="1.5" fill="#0099A8"/>
+                    <rect x="50" y="36" width="10" height="10" rx="1.5" fill="#0099A8"/>
+                    <rect x="36" y="50" width="10" height="10" rx="1.5" fill="#0099A8"/>
+                    <rect x="50" y="50" width="10" height="10" rx="1.5" fill="#0099A8"/>
+                  </svg>
+                </div>
+                <div class="ps-qr-title">Scanner le QR code</div>
+                <div class="ps-qr-sub">Sur la borne, avec l'appareil photo de ton téléphone</div>
+              </div>
+              <button class="phone-pay-btn" onclick="nextPhoneStep()">Scanner →</button>
+            </div>
+
+            <!-- Step 2: Duration -->
+            <div class="phone-step" id="ps2">
+              <div class="ps-header">
+                <div class="ps-logo">Kazi</div>
+                <div class="ps-step-badge">ÉTAPE 2 / 3</div>
+              </div>
+              <p style="font-size:.78rem;color:var(--muted);margin-bottom:.7rem">Choisir la durée</p>
+              <div class="ps-duration-grid">
+                <div class="ps-dur"><span class="ps-dur-val">1h</span><span class="ps-dur-label">2 €</span></div>
+                <div class="ps-dur sel"><span class="ps-dur-val">2h</span><span class="ps-dur-label">4 €</span></div>
+                <div class="ps-dur"><span class="ps-dur-val">Jour</span><span class="ps-dur-label">8 €</span></div>
+              </div>
+              <div class="ps-total">
+                <span class="ps-total-label">Total</span>
+                <span class="ps-total-val">4,00 €</span>
+              </div>
+              <button class="phone-pay-btn" onclick="nextPhoneStep()">Payer sans contact →</button>
+            </div>
+
+            <!-- Step 3: Open -->
+            <div class="phone-step" id="ps3">
+              <div class="ps-header">
+                <div class="ps-logo">Kazi</div>
+                <div class="ps-step-badge" style="background:#30d158">✓ PAYÉ</div>
+              </div>
+              <div class="ps-success">
+                <div class="ps-success-icon">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="rgba(48,209,88,.15)"/><path d="M10 16l4 4 8-8" stroke="#30d158" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="ps-success-title">Casier ouvert !</div>
+                <div class="ps-locker-num">05</div>
+                <div class="ps-success-sub">Ton code d'accès est envoyé par SMS</div>
+                <div class="ps-code">KZ·2026·7A3F</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="phone-dots" aria-hidden="true">
+          <div class="pd active" id="dot0"></div>
+          <div class="pd" id="dot1"></div>
+          <div class="pd" id="dot2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wave bottom -->
+  <div class="hero-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 64" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;height:64px">
+      <path d="M0,32 C240,58 480,8 720,32 C960,56 1200,8 1440,32 L1440,64 L0,64 Z" fill="var(--sand)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════ STATS ═══════════════ -->
+<section id="stats" aria-label="Chiffres clés">
+  <!-- SVG dot bg -->
+  <svg class="stats-dots" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <defs><pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="white"/></pattern></defs>
+    <rect width="100%" height="100%" fill="url(#dots)"/>
+  </svg>
+
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <span class="stat-num" data-target="20" data-suffix="s" aria-label="20 secondes">0<span class="stat-unit">s</span></span>
+      <span class="stat-label">Pour louer un casier</span>
+    </div>
+    <div class="stat-item reveal delay-1">
+      <span class="stat-num" data-target="0" data-suffix="€" aria-label="0 euro">0<span class="stat-unit">€</span></span>
+      <span class="stat-label">D'application à télécharger</span>
+    </div>
+    <div class="stat-item reveal delay-2">
+      <span class="stat-num" data-target="2" data-prefix="" data-suffix="€/h" aria-label="2 euros par heure">0<span class="stat-unit">€/h</span></span>
+      <span class="stat-label">Seulement</span>
+    </div>
+    <div class="stat-item reveal delay-3">
+      <span class="stat-num" data-static="24/7" aria-label="Disponible 24 heures sur 24, 7 jours sur 7">24/<span class="stat-unit">7</span></span>
+      <span class="stat-label">Disponible</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ HOW ═══════════════ -->
+<section id="how" aria-labelledby="how-title">
+  <div class="how-inner">
+    <div class="how-header">
+      <span class="section-badge teal reveal">Comment ça marche</span>
+      <h2 id="how-title" class="reveal delay-1">Simple comme<br>un coup de soleil.</h2>
+    </div>
+
+    <div class="steps-row" role="list">
+
+      <!-- Step 1 -->
+      <article class="step-card card-hover reveal" role="listitem">
+        <div class="step-bg-num" aria-hidden="true">01</div>
+        <div class="step-icon s1" aria-hidden="true">
+          <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="9" height="9" rx="2" stroke="#0099A8" stroke-width="1.8"/>
+            <rect x="4.5" y="4.5" width="4" height="4" rx=".5" fill="#0099A8"/>
+            <rect x="15" y="2" width="9" height="9" rx="2" stroke="#0099A8" stroke-width="1.8"/>
+            <rect x="17.5" y="4.5" width="4" height="4" rx=".5" fill="#0099A8"/>
+            <rect x="2" y="15" width="9" height="9" rx="2" stroke="#0099A8" stroke-width="1.8"/>
+            <rect x="4.5" y="17.5" width="4" height="4" rx=".5" fill="#0099A8"/>
+            <rect x="15" y="15" width="4" height="4" rx=".5" fill="#0099A8"/>
+            <rect x="15" y="21" width="4" height="3" rx=".5" fill="#0099A8"/>
+            <rect x="21" y="15" width="3" height="4" rx=".5" fill="#0099A8"/>
+            <rect x="21" y="21" width="3" height="3" rx=".5" fill="#0099A8"/>
+          </svg>
+        </div>
+        <div class="step-title">Scanner</div>
+        <p class="step-desc">Scanne le QR code sur la borne avec l'appareil photo de ton téléphone. Aucune appli à télécharger.</p>
+      </article>
+
+      <!-- Connector 1→2 -->
+      <div class="step-connector" aria-hidden="true">
+        <svg class="connector-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="10" x2="80" y2="10" class="connector-dashes" id="line1"/>
+        </svg>
+      </div>
+
+      <!-- Step 2 -->
+      <article class="step-card card-hover reveal delay-1" role="listitem">
+        <div class="step-bg-num" aria-hidden="true">02</div>
+        <div class="step-icon s2" aria-hidden="true">
+          <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="7" width="22" height="13" rx="2.5" stroke="#FF6B4A" stroke-width="1.8"/>
+            <rect x="2" y="11" width="22" height="3.5" fill="#FF6B4A" opacity=".25"/>
+            <rect x="5" y="16" width="6" height="2" rx="1" fill="#FF6B4A"/>
+            <rect x="13" y="16" width="3" height="2" rx="1" fill="#FF6B4A" opacity=".5"/>
+            <rect x="18" y="16" width="3" height="2" rx="1" fill="#FF6B4A" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="step-title">Payer</div>
+        <p class="step-desc">Choisis ta durée et paie sans contact. CB, Apple Pay, Google Pay.</p>
+      </article>
+
+      <!-- Connector 2→3 -->
+      <div class="step-connector" aria-hidden="true">
+        <svg class="connector-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="10" x2="80" y2="10" class="connector-dashes" id="line2"/>
+        </svg>
+      </div>
+
+      <!-- Step 3 -->
+      <article class="step-card card-hover reveal delay-2" role="listitem">
+        <div class="step-bg-num" aria-hidden="true">03</div>
+        <div class="step-icon s3" aria-hidden="true">
+          <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="13" cy="10" r="4" stroke="#30d158" stroke-width="1.8"/>
+            <line x1="13" y1="4" x2="13" y2="2.5" stroke="#30d158" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="19" y1="10" x2="21" y2="10" stroke="#30d158" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="7" y1="10" x2="5" y2="10" stroke="#30d158" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M2,20 Q5.5,16 9,20 Q12.5,24 16,20 Q19.5,16 24,20" stroke="#30d158" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="step-title">Profiter</div>
+        <p class="step-desc">Le casier s'ouvre. Plonge. On garde tout.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- Wave -->
+<div class="wave-sep" style="background:var(--sand)" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:56px">
+    <path d="M0,28 C360,56 720,0 1080,28 C1260,42 1380,18 1440,28 L1440,56 L0,56Z" fill="#0D1B2A"/>
+  </svg>
+</div>
+
+<!-- ═══════════════ BORNES ═══════════════ -->
+<section id="bornes" aria-labelledby="bornes-title">
+  <div class="bornes-inner">
+    <div class="bornes-header reveal">
+      <span class="section-badge">Nos bornes</span>
+      <h2 id="bornes-title" style="color:white">Conçues pour<br>s'effacer dans le décor.</h2>
+      <p style="margin-top:.75rem">Deux variantes pour deux univers — même technologie, même fiabilité.</p>
+    </div>
+
+    <div class="bornes-grid">
+
+      <!-- Kazi Nature -->
+      <div class="borne-card reveal card-hover">
+        <div class="locker-visual" aria-label="Aperçu visuel de la borne Kazi Nature">
+          <div class="locker-unit">
+            <div class="locker-header">
+              <div class="locker-brand">KAZI NATURE</div>
+            </div>
+            <div class="locker-grid-css">
+              <div class="locker-cell nature"><span class="lc-num">01</span><div class="lc-led green lc-led pulse"></div></div>
+              <div class="locker-cell nature occupied"><span class="lc-num">02</span><div class="lc-led red"></div></div>
+              <div class="locker-cell nature"><span class="lc-num">03</span><div class="lc-led green pulse"></div></div>
+              <div class="locker-cell nature"><span class="lc-num">04</span><div class="lc-led green pulse"></div></div>
+              <div class="locker-cell nature occupied"><span class="lc-num">05</span><div class="lc-led red"></div></div>
+              <div class="locker-cell nature"><span class="lc-num">06</span><div class="lc-led green pulse"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="borne-name">Kazi Nature</div>
+        <p class="borne-desc">Pour les plages naturelles et préservées. Design qui se fond dans l'environnement, sans rupture visuelle avec le paysage côtier.</p>
+        <div class="borne-tags">
+          <span class="borne-tag">Bois flotté certifié FSC</span>
+          <span class="borne-tag">Traitement anti-sel</span>
+          <span class="borne-tag">Cadenas électronique silencieux</span>
+          <span class="borne-tag">Plages naturelles</span>
+          <span class="borne-tag">Calanques</span>
+          <span class="borne-tag">Réserves</span>
+        </div>
+      </div>
+
+      <!-- Kazi Urban -->
+      <div class="borne-card reveal delay-2 card-hover">
+        <div class="locker-visual" aria-label="Aperçu visuel de la borne Kazi Urban">
+          <div class="locker-unit">
+            <div class="locker-header">
+              <div class="locker-brand" style="color:var(--coral)">KAZI URBAN</div>
+            </div>
+            <div class="locker-grid-css">
+              <div class="locker-cell occupied"><span class="lc-num">01</span><div class="lc-led red"></div></div>
+              <div class="locker-cell"><span class="lc-num">02</span><div class="lc-led green pulse"></div></div>
+              <div class="locker-cell"><span class="lc-num">03</span><div class="lc-led green pulse"></div></div>
+              <div class="locker-cell occupied"><span class="lc-num">04</span><div class="lc-led red"></div></div>
+              <div class="locker-cell"><span class="lc-num">05</span><div class="lc-led green pulse"></div></div>
+              <div class="locker-cell occupied"><span class="lc-num">06</span><div class="lc-led red"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="borne-name">Kazi Urban</div>
+        <p class="borne-desc">Pour les fronts de mer et plages urbaines. Acier brossé élégant, résistance maximale et interface tactile adaptée aux environnements haute fréquentation.</p>
+        <div class="borne-tags">
+          <span class="borne-tag urban">Acier brossé marine grade</span>
+          <span class="borne-tag urban">Résistance UV renforcée</span>
+          <span class="borne-tag urban">Interface tactile</span>
+          <span class="borne-tag urban">Plages urbaines</span>
+          <span class="borne-tag urban">Ports</span>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="borne-disclaimer reveal">Visuels représentatifs — renders définitifs à venir.</p>
+  </div>
+</section>
+
+<!-- Wave -->
+<div class="wave-sep" style="background:#0a1f30" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:56px">
+    <path d="M0,28 C480,0 960,56 1440,28 L1440,56 L0,56Z" fill="var(--sand)"/>
+  </svg>
+</div>
+
+<!-- ═══════════════ LOCATIONS ═══════════════ -->
+<section id="locations" aria-labelledby="locations-title">
+  <div class="locations-inner">
+    <span class="section-badge teal reveal">Où nous trouver</span>
+    <h2 id="locations-title" class="reveal delay-1">Les premières plages<br>de l'aventure.</h2>
+
+    <div class="locations-grid">
+
+      <article class="loc-card card-hover reveal">
+        <span class="loc-badge green">Été 2026</span>
+        <span class="loc-icon" aria-hidden="true">📍</span>
+        <div class="loc-city">Marseille</div>
+        <div class="loc-name">Plage des Catalans</div>
+        <div class="loc-count">14 emplacements prévus</div>
+      </article>
+
+      <article class="loc-card card-hover reveal delay-1">
+        <span class="loc-badge green">Été 2026</span>
+        <span class="loc-icon" aria-hidden="true">📍</span>
+        <div class="loc-city">Marseille</div>
+        <div class="loc-name">Plage du Prado</div>
+        <div class="loc-count">8 emplacements prévus</div>
+      </article>
+
+      <article class="loc-card card-hover reveal delay-2">
+        <span class="loc-badge orange">En discussion</span>
+        <span class="loc-icon" aria-hidden="true">📍</span>
+        <div class="loc-city">Nice</div>
+        <div class="loc-name">Promenade des Anglais</div>
+        <div class="loc-count">En discussion</div>
+      </article>
+
+      <a href="mailto:hello@kazi.fr?subject=Suggestion de plage" class="loc-suggest card-hover reveal delay-3" aria-label="Suggérer une plage">
+        <span class="loc-suggest-icon" aria-hidden="true">➕</span>
+        <span class="loc-suggest-text">Votre plage n'est pas listée ?</span>
+        <span class="loc-suggest-sub">Suggérer une plage</span>
+      </a>
+
+    </div>
+
+    <p class="loc-disclaimer reveal">Données prévisionnelles — les emplacements définitifs seront confirmés au printemps 2026.</p>
+  </div>
+</section>
+
+<!-- Wave -->
+<div class="wave-sep" style="background:var(--sand)" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:56px">
+    <path d="M0,20 C360,50 720,5 1080,40 C1260,55 1380,30 1440,38 L1440,56 L0,56Z" fill="var(--white)"/>
+  </svg>
+</div>
+
+<!-- ═══════════════ PRICING ═══════════════ -->
+<section id="pricing" aria-labelledby="pricing-title">
+  <div class="pricing-inner">
+    <span class="section-badge reveal">Tarifs</span>
+    <h2 id="pricing-title" class="reveal delay-1">Simple.<br>Transparent.</h2>
+    <p class="reveal delay-2" style="margin-top:.75rem">Pas d'abonnement. Pas de frais cachés.</p>
+
+    <div class="pricing-grid" role="list">
+
+      <div class="pc card-hover reveal" role="listitem">
+        <div class="pc-name">Heure</div>
+        <div class="pc-price-row">
+          <span class="pc-price">2€</span>
+          <span class="pc-unit">/h</span>
+        </div>
+        <div class="pc-duration">Flexible</div>
+        <div class="pc-ideal">Idéal pour une baignade rapide</div>
+        <a href="#waitlist" class="btn btn-ghost pc-btn">Choisir</a>
+      </div>
+
+      <div class="pc featured card-hover reveal delay-1" role="listitem">
+        <div class="pc-popular">⭐ Plus populaire</div>
+        <div class="pc-name">Journée</div>
+        <div class="pc-price-row">
+          <span class="pc-price">8€</span>
+        </div>
+        <div class="pc-duration">Jusqu'à 23h59</div>
+        <div class="pc-ideal">Idéal pour une journée complète</div>
+        <a href="#waitlist" class="btn btn-coral pc-btn">Choisir</a>
+      </div>
+
+      <div class="pc card-hover reveal delay-2" role="listitem">
+        <div class="pc-name">Weekend</div>
+        <div class="pc-price-row">
+          <span class="pc-price">14€</span>
+        </div>
+        <div class="pc-duration">Vendredi soir → Dimanche soir</div>
+        <div class="pc-ideal">Idéal pour un séjour plage</div>
+        <a href="#waitlist" class="btn btn-ghost pc-btn">Choisir</a>
+      </div>
+
+    </div>
+
+    <p class="pricing-note reveal">Tu paies uniquement quand tu utilises.</p>
+  </div>
+</section>
+
+<!-- Wave -->
+<div class="wave-sep" style="background:var(--white)" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:56px">
+    <path d="M0,28 C240,8 480,50 720,28 C960,6 1200,48 1440,28 L1440,56 L0,56Z" fill="var(--navy)"/>
+  </svg>
+</div>
+
+<!-- ═══════════════ WAITLIST ═══════════════ -->
+<section id="waitlist" aria-labelledby="waitlist-title">
+  <div class="waitlist-inner">
+    <span class="section-badge reveal">Accès prioritaire</span>
+    <h2 id="waitlist-title" class="reveal delay-1">Sois là dès<br>le premier jour.</h2>
+    <p class="wl-sub reveal delay-2">Rejoins la liste et reçois un accès prioritaire + <strong>1 heure offerte</strong> à l'ouverture.</p>
+
+    <form class="wl-form reveal delay-3" id="wl-form" onsubmit="handleWaitlist(event)" novalidate>
+      <label for="wl-email" class="sr-only">Ton adresse email</label>
+      <input type="email" id="wl-email" name="email" class="wl-input" placeholder="ton@email.com" autocomplete="email" required aria-required="true">
+      <button type="submit" class="btn btn-coral wl-btn">Je rejoins →</button>
+    </form>
+
+    <p class="wl-counter reveal delay-3"><strong>🔥 247 personnes</strong> déjà inscrites</p>
+    <p class="wl-reassurance reveal delay-4">📩 Zéro spam. On t'écrit uniquement à l'ouverture de Kazi sur ta plage.</p>
+
+    <div class="wl-success" id="wl-success" role="alert" aria-live="polite">
+      <span class="wl-success-icon">🎉</span>
+      <p class="wl-success-text"><strong>✓ Tu es sur la liste !</strong><br>On te prévient dès qu'on ouvre à Marseille.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Wave -->
+<div class="wave-sep" style="background:var(--navy)" aria-hidden="true">
+  <svg viewBox="0 0 1440 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:56px">
+    <path d="M0,28 C360,56 720,0 1080,36 C1260,50 1380,20 1440,28 L1440,56 L0,56Z" fill="var(--sand)"/>
+  </svg>
+</div>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section id="faq" aria-labelledby="faq-title">
+  <div class="faq-inner">
+    <span class="section-badge teal reveal">Questions fréquentes</span>
+    <h2 id="faq-title" class="reveal delay-1">On a réponse<br>à tout.</h2>
+
+    <div class="faq-list" role="list">
+
+      <div class="faq-item reveal" role="listitem">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          Que faire si je perds mon code SMS ?
+          <span class="faq-icon" aria-hidden="true"><svg viewBox="0 0 13 13"><path d="M2 4.5L6.5 9 11 4.5"/></svg></span>
+        </button>
+        <div class="faq-body" role="region"><div class="faq-answer">Contacte-nous via le bouton d'urgence affiché sur la borne. Un agent peut ouvrir ton casier à distance en moins de 5 minutes.</div></div>
+      </div>
+
+      <div class="faq-item reveal delay-1" role="listitem">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          Que se passe-t-il si la borne est en panne ?
+          <span class="faq-icon" aria-hidden="true"><svg viewBox="0 0 13 13"><path d="M2 4.5L6.5 9 11 4.5"/></svg></span>
+        </button>
+        <div class="faq-body" role="region"><div class="faq-answer">Chaque borne est connectée en temps réel à notre système. En cas de panne, tu es remboursé automatiquement et redirigé vers la borne la plus proche.</div></div>
+      </div>
+
+      <div class="faq-item reveal delay-1" role="listitem">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          Puis-je prolonger ma location en cours ?
+          <span class="faq-icon" aria-hidden="true"><svg viewBox="0 0 13 13"><path d="M2 4.5L6.5 9 11 4.5"/></svg></span>
+        </button>
+        <div class="faq-body" role="region"><div class="faq-answer">Oui. Tu reçois un SMS 15 minutes avant la fin de ta location avec un lien pour prolonger en un clic.</div></div>
+      </div>
+
+      <div class="faq-item reveal delay-2" role="listitem">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          Les casiers sont-ils résistants à l'eau et au sable ?
+          <span class="faq-icon" aria-hidden="true"><svg viewBox="0 0 13 13"><path d="M2 4.5L6.5 9 11 4.5"/></svg></span>
+        </button>
+        <div class="faq-body" role="region"><div class="faq-answer">Totalement. Nos bornes sont certifiées IP65 — étanches à la poussière et aux projections d'eau. Conçues pour résister au sel, au sable et au soleil méditerranéen.</div></div>
+      </div>
+
+      <div class="faq-item reveal delay-2" role="listitem">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          Dois-je télécharger une application ?
+          <span class="faq-icon" aria-hidden="true"><svg viewBox="0 0 13 13"><path d="M2 4.5L6.5 9 11 4.5"/></svg></span>
+        </button>
+        <div class="faq-body" role="region"><div class="faq-answer">Non. Zéro appli. Tu scannes un QR code avec l'appareil photo de ton téléphone, c'est tout.</div></div>
+      </div>
+
+      <div class="faq-item reveal delay-3" role="listitem">
+        <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+          Comment devenir partenaire (plage, restaurant, hôtel) ?
+          <span class="faq-icon" aria-hidden="true"><svg viewBox="0 0 13 13"><path d="M2 4.5L6.5 9 11 4.5"/></svg></span>
+        </button>
+        <div class="faq-body" role="region"><div class="faq-answer">Écris-nous à <a href="mailto:partenaires@kazi.fr">partenaires@kazi.fr</a>. On installe les bornes à nos frais, tu touches une commission sur chaque location.</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+
+      <!-- Col 1: Brand -->
+      <div class="footer-brand">
+        <div class="f-logo">
+          <div class="f-logo-icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1" stroke-width="1.8"/><rect x="9" y="2" width="5" height="5" rx="1" stroke-width="1.8"/><rect x="2" y="9" width="5" height="5" rx="1" stroke-width="1.8"/><rect x="9" y="9" width="5" height="5" rx="1" stroke-width="1.8"/></svg>
+          </div>
+          Kazi
+        </div>
+        <p class="footer-tagline">Posez vos affaires. Profitez.</p>
+        <p class="footer-copy">© 2026 Kazi SAS — Marseille, France</p>
+      </div>
+
+      <!-- Col 2: Links -->
+      <div class="f-col">
+        <h4>Navigation</h4>
+        <a href="#how">Concept</a>
+        <a href="#pricing">Tarifs</a>
+        <a href="mailto:partenaires@kazi.fr">Partenaires</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="mailto:hello@kazi.fr">Contact</a>
+      </div>
+
+      <!-- Col 3: Socials -->
+      <div class="f-col">
+        <h4>Réseaux sociaux</h4>
+        <div class="f-socials">
+          <!-- Instagram -->
+          <a href="#" class="f-social" aria-label="Kazi sur Instagram">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <!-- TikTok -->
+          <a href="#" class="f-social" aria-label="Kazi sur TikTok">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/></svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="#" class="f-social" aria-label="Kazi sur LinkedIn">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+        <p class="f-coming">Bientôt sur les réseaux</p>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p style="font-size:.78rem;color:rgba(255,255,255,.2)">Conçu et fabriqué à Marseille · Prototype 2026</p>
+      <div style="display:flex;gap:1.5rem">
+        <a href="mentions-legales.html" style="font-size:.75rem;color:rgba(255,255,255,.25);text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.25)'">Mentions légales</a>
+        <a href="mailto:hello@kazi.fr" style="font-size:.75rem;color:rgba(255,255,255,.25);text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.25)'">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to top -->
+<a href="#" id="back-top" aria-label="Retour en haut de page">
+  <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M9 14V4M4 9l5-5 5 5"/></svg>
+</a>
+
+<script>
+/* ══════════════════════════════
+   NAVBAR
+══════════════════════════════ */
+const navbar=document.getElementById('navbar');
+const burger=document.getElementById('hamburger');
+const drawer=document.getElementById('mobile-drawer');
+const overlay=document.getElementById('overlay');
+
+window.addEventListener('scroll',()=>{
+  navbar.classList.toggle('scrolled',window.scrollY>60);
+  document.getElementById('back-top').classList.toggle('visible',window.scrollY>400);
+},{passive:true});
+
+burger.addEventListener('click',()=>{
+  const open=drawer.classList.toggle('open');
+  overlay.classList.toggle('open',open);
+  burger.classList.toggle('open',open);
+  burger.setAttribute('aria-expanded',open);
+  drawer.setAttribute('aria-hidden',!open);
+});
+overlay.addEventListener('click',closeDrawer);
+
+function closeDrawer(){
+  drawer.classList.remove('open');
+  overlay.classList.remove('open');
+  burger.classList.remove('open');
+  burger.setAttribute('aria-expanded','false');
+  drawer.setAttribute('aria-hidden','true');
+}
+
+/* ══════════════════════════════
+   PHONE MOCKUP STEPS
+══════════════════════════════ */
+let currentStep=0;
+const steps=['ps1','ps2','ps3'];
+const dots=[document.getElementById('dot0'),document.getElementById('dot1'),document.getElementById('dot2')];
+
+function showStep(n){
+  steps.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(i===n){el.classList.add('active');el.style.position='relative';el.style.top='auto';el.style.left='auto';el.style.right='auto';}
+    else{el.classList.remove('active');el.style.position='absolute';}
+  });
+  dots.forEach((d,i)=>d.classList.toggle('active',i===n));
+}
+
+function nextPhoneStep(){
+  currentStep=(currentStep+1)%steps.length;
+  showStep(currentStep);
+}
+
+// Auto cycle
+setInterval(()=>{
+  currentStep=(currentStep+1)%steps.length;
+  showStep(currentStep);
+},2500);
+
+/* ══════════════════════════════
+   SCROLL REVEAL (IntersectionObserver)
+══════════════════════════════ */
+const revealObs=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      revealObs.unobserve(entry.target);
+    }
+  });
+},{threshold:0.15,rootMargin:'0px 0px -40px 0px'});
+
+document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+/* ══════════════════════════════
+   COUNTER ANIMATION
+══════════════════════════════ */
+function animateCounter(el,target,duration=1500){
+  const start=performance.now();
+  const unit=el.querySelector('.stat-unit');
+  const unitHTML=unit?unit.outerHTML:'';
+  const isStatic=el.dataset.static;
+  if(isStatic)return;
+  const update=now=>{
+    const elapsed=Math.min((now-start)/duration,1);
+    const eased=1-Math.pow(1-elapsed,3);
+    const val=Math.round(eased*target);
+    el.innerHTML=val+(el.dataset.suffix||'');
+    if(elapsed<1)requestAnimationFrame(update);
+    else el.innerHTML=target+(el.dataset.suffix||'');
+  };
+  requestAnimationFrame(update);
+}
+
+const counterObs=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const nums=entry.target.querySelectorAll('[data-target]');
+      nums.forEach(num=>{
+        const target=+num.dataset.target;
+        animateCounter(num,target);
+      });
+      counterObs.unobserve(entry.target);
+    }
+  });
+},{threshold:0.3});
+
+const statsSection=document.getElementById('stats');
+if(statsSection)counterObs.observe(statsSection);
+
+/* ══════════════════════════════
+   CONNECTOR LINES (dash animation)
+══════════════════════════════ */
+const connectorObs=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.querySelectorAll('.connector-dashes').forEach((line,i)=>{
+        setTimeout(()=>{line.classList.add('animated')},i*200);
+      });
+      connectorObs.unobserve(entry.target);
+    }
+  });
+},{threshold:0.5});
+
+const howSection=document.getElementById('how');
+if(howSection)connectorObs.observe(howSection);
+
+/* ══════════════════════════════
+   FAQ ACCORDION
+══════════════════════════════ */
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item.open').forEach(i=>{
+    i.classList.remove('open');
+    i.querySelector('.faq-trigger').setAttribute('aria-expanded','false');
+  });
+  // Open clicked if was closed
+  if(!isOpen){
+    item.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+  }
+}
+
+/* ══════════════════════════════
+   WAITLIST FORM
+══════════════════════════════ */
+function handleWaitlist(e){
+  e.preventDefault();
+  const email=document.getElementById('wl-email').value.trim();
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    const input=document.getElementById('wl-email');
+    input.style.borderColor='rgba(255,107,74,.6)';
+    input.focus();
+    return;
+  }
+  document.getElementById('wl-form').style.display='none';
+  const success=document.getElementById('wl-success');
+  success.classList.add('show');
+  success.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ══════════════════════════════
+   SMOOTH SCROLL for btn-ghost-white
+══════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const target=document.querySelector(a.getAttribute('href'));
+    if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+});
+</script>
+
+<!-- Screen reader only utility -->
+<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}</style>
+
+</body>
+</html>
